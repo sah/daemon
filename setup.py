@@ -4,6 +4,6 @@ from distutils.core import setup
 
 setup(
     name="daemon",
-    version="1.0",
+    version="1.1",
     py_modules=['daemon']
 )
