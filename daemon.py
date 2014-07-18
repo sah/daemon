@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2009-2010 Sauce Labs Inc
+# Copyright (c) 2009-2014 Sauce Labs Inc
 #
 # Portions taken from twistd:
 #
@@ -79,7 +79,11 @@ def basic_daemonize():
 
 
 def writePID(pidfile):
-    open(pidfile,'wb').write(str(os.getpid()))
+    try:
+        f = open(pidfile,'wb')
+        f.write(str(os.getpid()))
+    finally:
+        f.close()
     if not os.path.exists(pidfile):
         raise Exception( "pidfile %s does not exist" % pidfile )
 
@@ -89,9 +93,12 @@ def checkPID(pidfile):
         return
     if os.path.exists(pidfile):
         try:
-            pid = int(open(pidfile).read())
+            f = open(pidfile)
+            pid = int(f.read())
         except ValueError:
             sys.exit('Pidfile %s contains non-numeric value' % pidfile)
+        finally:
+            f.close()
         try:
             os.kill(pid, 0)
         except OSError, why:
@@ -109,4 +116,3 @@ def daemonize(pidfile):
     checkPID(pidfile)
     basic_daemonize()
     writePID(pidfile)
-
