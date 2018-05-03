@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2009-2014 Sauce Labs Inc
+# Copyright (c) 2009-2018 Sauce Labs Inc
 #
 # Portions taken from twistd:
 #
