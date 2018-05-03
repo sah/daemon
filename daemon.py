@@ -67,12 +67,12 @@ def basic_daemonize():
     os.setsid()
     if os.fork():   # launch child and...
         os._exit(0) # kill off parent again.
-    os.umask(022)   # Don't allow others to write
+    os.umask(0o22)   # Don't allow others to write
     null=os.open('/dev/null', os.O_RDWR)
     for i in range(3):
         try:
             os.dup2(null, i)
-        except OSError, e:
+        except OSError as e:
             if e.errno != errno.EBADF:
                 raise
     os.close(null)
@@ -101,10 +101,10 @@ def checkPID(pidfile):
             f.close()
         try:
             os.kill(pid, 0)
-        except OSError, why:
+        except OSError as why:
             if why[0] == errno.ESRCH:
                 # The pid doesnt exists.
-                print('Removing stale pidfile %s' % pidfile)
+                print(('Removing stale pidfile %s' % pidfile))
                 os.remove(pidfile)
             else:
                 sys.exit("Can't check status of PID %s from pidfile %s: %s" %
